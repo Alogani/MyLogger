@@ -5,7 +5,7 @@ Another Logger implementation in Python. This one fits my needs because it's hig
 
 See MyLogger/example.py for an example usage
 
-It's not designed to be out-of-the-box by obfuscating the complexity. Because it will lake flexibility.
+It's not designed to be out-of-the-box by obfuscating the complexity. Because it would lake flexibility.
 But it's designed to be as higly customizable while staying straitforward.
 
 ## Features
