@@ -39,24 +39,23 @@ class MyContext(Context):
 
 logger = Logger()
 logger.addToContext(MyContext.INFO, ConsoleHandler())
+
+logger.log(MyContext.INFO, "First logging")
+
 logger.addToContext([MyContext.WARNING, MyContext.ALERT, MyContext.OPEN],
                     FileHandler(CountFifoRotator(file_path="test_file.log", max_files=3)))
 logger.associateContext(MyContext.INFO, MyContext.WARNING)
-logger.addToContext("NOTIF", NotificationHandler())
+logger.addToContext("NOTIF", NotificationHandler())  # Using non-enums (note : ugly but works)
 
-
-logger2 = logger.copy()
-logger2.clearContext(MyContext.INFO)
-logger2.addToContext(MyContext.INFO, ConsoleHandler(formatter=Formatter("LOGGER2 - {context} - {time} - {message}")))
-
-logger.log(MyContext.INFO, "First logging")
-logger.log([MyContext.WARNING, "NOTIF"], "Log to multiple levels")
+logger.log(MyContext.INFO, "Second logging")
+logger.log([MyContext.WARNING, "NOTIF"], "Log to multiple different places")  # This will also log to INFO if you follow
 logger.log(MyContext.DEBUG, "This will not be shown")
 
 with logger.open([MyContext.OPEN, MyContext.WARNING]) as f:
     f.write("This is a direct log writing")
-
-with logger.open(MyContext.OPEN) as f:
     subprocess.run(["echo", "Hello log"], stdout=f, stderr=subprocess.STDOUT)
 
-logger2.log(MyContext.INFO, "test")
+logger2 = logger.copy()
+logger2.clearContext(MyContext.INFO)
+logger2.addToContext(MyContext.INFO, ConsoleHandler(formatter=Formatter("LOGGER2 - {context} - {time} - {message}")))
+logger2.log(MyContext.INFO, "last logging")
