@@ -37,24 +37,32 @@ class MyContext(Context):
     OPEN = auto()
 
 
+# BASIC USAGE for anyone !
 logger = Logger()
 logger.addToContext(MyContext.INFO, ConsoleHandler())
 
 logger.log(MyContext.INFO, "First logging")
 
+# LET'S SEE FILES
 logger.addToContext([MyContext.WARNING, MyContext.ALERT, MyContext.OPEN],
                     FileHandler(CountFifoRotator(file_path="test_file.log", max_files=3)))
+
+# OH, THERE IS CUSTOMIZATION
 logger.associateContext(MyContext.INFO, MyContext.WARNING)
 logger.addToContext("NOTIF", NotificationHandler())  # Using non-enums (note : ugly but works)
 
+# OK, ENOUGH DEFINITION, TIME TO LOG
 logger.log(MyContext.INFO, "Second logging")
 logger.log([MyContext.WARNING, "NOTIF"], "Log to multiple different places")  # This will also log to INFO if you follow
-logger.log(MyContext.DEBUG, "This will not be shown")
+logger.log(MyContext.DEBUG, "This will not be shown")  # Because debug is not defined, but it's useful to have some !
 
+# SPECIAL LOGGING WAY : as a file !
 with logger.open([MyContext.OPEN, MyContext.WARNING]) as f:
     f.write("This is a direct log writing")
     subprocess.run(["echo", "Hello log"], stdout=f, stderr=subprocess.STDOUT)
 
+
+# Extend customization by defining child logger
 logger2 = logger.copy()
 logger2.clearContext(MyContext.INFO)
 logger2.addToContext(MyContext.INFO, ConsoleHandler(formatter=Formatter("LOGGER2 - {context} - {time} - {message}")))
