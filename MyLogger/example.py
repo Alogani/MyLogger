@@ -29,7 +29,6 @@ from __init__ import *
 
 
 class MyContext(Context):
-    NOTIF = auto()
     DEBUG = auto()
     INFO = auto()
     WARNING = auto()
