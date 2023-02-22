@@ -45,7 +45,9 @@ logger.log(MyContext.INFO, "First logging")
 
 # LET'S SEE FILES
 logger.addToContext([MyContext.WARNING, MyContext.ALERT, MyContext.OPEN],
-                    FileHandler(CountFifoRotator(file_path="test_file.log", max_files=3)))
+                    [FileHandler(CountFifoRotator(file_path="test_file.log", max_files=3)),
+                     FileHandler(TimedFifoRotator(file_path="test_file_2.log", max_days=10, min_files=3))
+                     ])
 
 # OH, THERE IS CUSTOMIZATION
 logger.associateContext(MyContext.INFO, MyContext.WARNING)
