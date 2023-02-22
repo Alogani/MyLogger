@@ -14,7 +14,7 @@ But it's designed to be as higly customizable while staying straitforward.
 - Log on notification system of linux, with "notify-gui" shell tool
 - Log to journalctl, with "logger" shell tool
 - Log to a file, with custom rotating options
-- Or anywhere you want, thanks to a design which can be easily extended to fit your needs
+- Or anywhere you want, thanks to a design which can be easily extended to fit your needs (see MyLogger/LogHandler->ConsoleHandler -> only 5 lines of code)
 
 ### How can it log
 - Logging with event-driven principle : create as many context of logging you want
