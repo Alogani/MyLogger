@@ -28,6 +28,7 @@ I recommend to use this module by defining a global logger variable common to al
 
 According to my needs and time, I could add :
 - logging to mail
+- More ways to rotate files (by size, with compression, rotation on a single file, rotation with different policies (GrandFatherSon or Hanoi))
 - decorator for functions (exception catching)
 - add **kwargs to log function
 - add a class where FileHandler and all FileRotators are merged for a more intuitive usage
