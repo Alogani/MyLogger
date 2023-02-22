@@ -1,5 +1,5 @@
 # MyLogger
-Another Logger implementation in Python. This one fits my needs because it's highly customizable and I adore to log oin multiple ways for important stuff
+Another Logger implementation in Python. This one fits my needs because it's highly customizable and I adore to log on multiple ways for important stuff
 
 ## Usage
 
