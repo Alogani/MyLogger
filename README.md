@@ -30,5 +30,5 @@ According to my needs and time, I could add :
 - logging to mail
 - More ways to rotate files (by size, with compression, rotation on a single file, rotation with different policies (GrandFatherSon or Hanoi))
 - decorator for functions (exception catching)
-- add **kwargs to log function
+- add **kwargs to log function for less verbose message
 - add a class where FileHandler and all FileRotators are merged for a more intuitive usage
