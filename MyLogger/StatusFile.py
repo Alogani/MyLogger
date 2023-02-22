@@ -27,6 +27,7 @@ import csv
 
 
 class StatusFile:
+    """This code is standalone and is not part of MyLogger. But I find its usage close, so here it is"""
     def __init__(self, file_path: str, sep: str = ';'):
         self.file_path = file_path
         self.sep = sep
