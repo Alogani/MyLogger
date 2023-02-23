@@ -27,8 +27,7 @@ But it's designed to be as higly customizable while staying straitforward.
 - You won't get bloat with a persistent and static logger object and its child. Instead your logger is a class instance (much more pythonic !)
 - Each event can be associated with specific place to log, or different log formatting
 - Easily handle your log as a file, with any handler compatible with "open" function (useful for logging subprocess output)
-- decorators ! Automatically log all exceptions of a function with only one line.
-- more decorators ! Transform each print into a logger with only one line
+- Decorator for error catching ! Automatically log all exceptions of a function with only one line. Decorator for print replacing ! Transform each print into a logger with only one line
 
 I recommend to use this module by defining a global logger variable common to all files inside a project (Yes globals are the darkness, but a logger is a special kind of toy)
 
