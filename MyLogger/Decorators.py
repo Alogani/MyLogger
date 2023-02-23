@@ -13,6 +13,7 @@ def LogCatcher(logger: Logger, event: Union[LogEvent, list[LogEvent]], message_f
             except Exception as e:
                 message = Formatter(message_format)({"exception": str(e)})
                 logger.log(event, message)
+                raise e
 
         return wrapper
 
