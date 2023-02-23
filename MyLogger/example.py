@@ -78,7 +78,7 @@ def failure_func():
 @PrintCatcher(logger, MyEvent.INFO, message_format="Here are print args:\n---\n{print_arg}\n---\n")
 def printer():
     print("Catch this if you can", "and this", sep='\n')
-    print("and again")
+    print("and again", end='')
 
 
 failure_func()
