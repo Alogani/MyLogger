@@ -15,12 +15,14 @@ But it's designed to be as higly customizable while staying straitforward.
 ## Features
 
 ### Where can it log
+
 - Log on notification system of linux, with "notify-gui" shell tool
 - Log to journalctl, with "logger" shell tool
 - Log to a file, with custom rotating options
 - Or anywhere you want, thanks to a design which can be easily extended to fit your needs (see MyLogger/LogHandler->ConsoleHandler -> only 5 lines of code)
 
 ### How can it log
+
 - Logging with event-driven principle : create as many context of logging you want
 - You won't get bloat with a persistent and static logger object and its child. Instead your logger is a class instance (much more pythonic !)
 - Each context can be associated with specific place to log, or different log formatting
@@ -30,9 +32,21 @@ But it's designed to be as higly customizable while staying straitforward.
 
 I recommend to use this module by defining a global logger variable common to all files inside a project (Yes globals are the darkness, but a logger is a special kind of toy)
 
+
 ### Will this be improve ?
 
 According to my needs and time, I could add :
 - logging to mail
 - More ways to rotate files (by size, with compression, rotation on a single file, rotation with different policies (GrandFatherSon or Hanoi))
 - add a class where FileHandler and all FileRotators are merged for a more intuitive usage
+
+
+### Benchmark
+
+On my computer :
+- print on console : 100 000 times
+  - using print(i) : 0,12s
+  - using logger.log(i), with ConsoleHandler() : 0,62s
+- write on file : 100 000 times
+  - using open('path') as f, then f.write(i) : 2,14s
+  - using logger.log(i), with FileHandler() : 3,44s
