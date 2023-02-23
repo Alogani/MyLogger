@@ -45,8 +45,8 @@ According to my needs and time, I could add :
 
 On my computer :
 - print on console : 100 000 times
-  - using print(i) : 0,12s
-  - using logger.log(i), with ConsoleHandler() : 0,62s
+  - using print : 0,12s
+  - using logger.log with ConsoleHandler : 0,62s
 - write on file : 100 000 times
-  - using open('path') as f, then f.write(i) : 2,14s
-  - using logger.log(i), with FileHandler() : 3,44s
+  - using open and write built-ins : 2,14s
+  - using logger.log with FileHandler : 3,44s
