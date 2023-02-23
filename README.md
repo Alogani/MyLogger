@@ -25,7 +25,7 @@ But it's designed to be as higly customizable while staying straitforward.
 
 - Logging with event-driven principle : create as many context of logging you want
 - You won't get bloat with a persistent and static logger object and its child. Instead your logger is a class instance (much more pythonic !)
-- Each context can be associated with specific place to log, or different log formatting
+- Each event can be associated with specific place to log, or different log formatting
 - Easily handle your log as a file, with any handler compatible with "open" function (useful for logging subprocess output)
 - decorators ! Automatically log all exceptions of a function with only one line.
 - more decorators ! Transform each print into a logger with only one line
