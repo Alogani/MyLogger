@@ -27,4 +27,5 @@ from MyLogger.Logger import *
 from MyLogger.Formatter import *
 from MyLogger.LogHandler import *
 from MyLogger.FileRotator import *
-from MyLogger.Context_interface import *
+from MyLogger.LogEvent_interface import *
+from MyLogger.Decorators import *

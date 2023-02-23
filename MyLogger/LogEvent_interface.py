@@ -23,21 +23,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from datetime import datetime
+from enum import Enum
 
 
-class _DefaultDict(dict):
-    def __missing__(self, key):
-        return "{" + key + "}"
+class LogEvent(Enum):
+    """Empty class to help implement a more rigorous way to define context, without typing error.
+    But each time a Context object is necessary, you could use a string, it will also work fine, but they won't mix"""
 
-
-class Formatter:
-    def __init__(self, message_format: str = "{message}", time_format: str = "%Y-%m-%d %H:%M:%S") -> None:
-        """message_format -- available variables : time, message, event\n
-        time_format -- every_format accepted by datetime.strftime"""
-        self.message_format = message_format
-        self.time_format = time_format
-
-    def __call__(self, formatter_dict: dict[str, str]) -> str:
-        formatter_dict["time"] = datetime.now().strftime(self.time_format)
-        return self.message_format.format_map(_DefaultDict(**formatter_dict))
+    def __str__(self) -> str:
+        """Usage : {context} in Formatter"""
+        return self.name

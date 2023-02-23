@@ -23,85 +23,85 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from MyLogger.Context_interface import Context
+from MyLogger.LogEvent_interface import LogEvent
 from MyLogger.LogHandler import _BaseHandler
 from MyLogger.FileFaker import MultipleFileFaker
 from typing import Union
 
 
 class Logger:
-    def __init__(self, context: dict[Context, list[_BaseHandler]] = None) -> None:
-        self._contexts = context if context else {}
-        self._context_association = {}
+    def __init__(self, event: dict[LogEvent, list[_BaseHandler]] = None) -> None:
+        self._events = event if event else {}
+        self._event_association = {}
 
-    def addToContext(self, context_name: Union[Context, list[Context]],
-                     handler: Union[_BaseHandler, list[_BaseHandler]]):
-        context_namelist = context_name if type(context_name) == list else [context_name]
+    def addToEvent(self, event_name: Union[LogEvent, list[LogEvent]],
+                   handler: Union[_BaseHandler, list[_BaseHandler]]):
+        event_namelist = event_name if type(event_name) == list else [event_name]
         handler_list = handler if type(handler) == list else [handler]
 
-        for name in context_namelist:
-            if name not in self._contexts:
-                self._contexts[name] = handler_list.copy()
+        for name in event_namelist:
+            if name not in self._events:
+                self._events[name] = handler_list.copy()
             else:
                 for handler in handler_list:
-                    self._contexts[name].append(handler)
+                    self._events[name].append(handler)
 
-    def clearContext(self, context_name: Union[Context, list[Context]]):
-        context_namelist = context_name if type(context_name) == list else [context_name]
+    def clearEvent(self, event_name: Union[LogEvent, list[LogEvent]]):
+        event_namelist = event_name if type(event_name) == list else [event_name]
 
-        for context in context_namelist:
-            if context in self._contexts:
-                self._contexts[context] = []
+        for event in event_namelist:
+            if event in self._events:
+                self._events[event] = []
 
-    def associateContext(self, context_target: Union[Context, list[Context]],
-                         context_source: Union[Context, list[Context]]):
-        """context_target will be called each time context_source will be used"""
-        target_namelist = context_target if type(context_target) == list else [context_target]
-        source_namelist = context_source if type(context_source) == list else [context_source]
+    def associateEvent(self, event_target: Union[LogEvent, list[LogEvent]],
+                       event_source: Union[LogEvent, list[LogEvent]]):
+        """event_target will be called each time event_source will be used"""
+        target_namelist = event_target if type(event_target) == list else [event_target]
+        source_namelist = event_source if type(event_source) == list else [event_source]
 
         for source in source_namelist:
-            if source not in self._context_association:
-                self._context_association[source] = target_namelist
+            if source not in self._event_association:
+                self._event_association[source] = target_namelist
             else:
                 for target in target_namelist:
-                    self._context_association[source].append(target)
+                    self._event_association[source].append(target)
 
-    def _populateContextWithAssociation(self, context_name: Union[Context, list[Context]])\
-            -> tuple[list[Context], list[Context]]:
-        context_namelist = context_name if type(context_name) == list else [context_name]
+    def _populateEventWithAssociation(self, event_name: Union[LogEvent, list[LogEvent]]) \
+            -> tuple[list[LogEvent], list[LogEvent]]:
+        event_namelist = event_name if type(event_name) == list else [event_name]
 
-        context_referent = context_namelist.copy()
+        event_referent = event_namelist.copy()
 
         i = 0
-        while i < len(context_namelist):
-            search_context = context_namelist[i]
-            for new_context in self._context_association.get(search_context, []):
-                if new_context not in context_namelist:
-                    context_namelist.append(new_context)
-                    context_referent.append(context_referent[i])
+        while i < len(event_namelist):
+            search_event = event_namelist[i]
+            for new_event in self._event_association.get(search_event, []):
+                if new_event not in event_namelist:
+                    event_namelist.append(new_event)
+                    event_referent.append(event_referent[i])
 
             i += 1
 
-        return context_namelist, context_referent
+        return event_namelist, event_referent
 
     def copy(self) -> 'Logger':
-        new_context = self._contexts.copy()
-        for key in new_context:
-            new_context[key] = self._contexts[key].copy()
-        return Logger(new_context)
+        new_event = self._events.copy()
+        for key in new_event:
+            new_event[key] = self._events[key].copy()
+        return Logger(new_event)
 
-    def log(self, context_name: Union[Context, list[Context]], message: str) -> None:
-        context_namelist, context_referent = self._populateContextWithAssociation(context_name)
+    def log(self, event_name: Union[LogEvent, list[LogEvent]], message: str) -> None:
+        event_namelist, event_referent = self._populateEventWithAssociation(event_name)
 
-        for name, referent in zip(context_namelist, context_referent):
-            for handler in self._contexts.get(name, []):
-                handler.emit(message, formatter_dict={"context": str(referent)})
+        for name, referent in zip(event_namelist, event_referent):
+            for handler in self._events.get(name, []):
+                handler.emit(formatter_dict={"message": message, "event": str(referent)})
 
-    def open(self, context_name: Union[Context, list[Context]], mode: str = 'a') -> MultipleFileFaker:
+    def open(self, event_name: Union[LogEvent, list[LogEvent]], mode: str = 'a') -> MultipleFileFaker:
         """With this function, logging will not be formatted.
         File writing will be optimized."""
-        context_namelist = self._populateContextWithAssociation(context_name)[0]
+        event_namelist = self._populateEventWithAssociation(event_name)[0]
 
         return MultipleFileFaker([handler.open(mode)
-                                  for name in context_namelist
-                                  for handler in self._contexts.get(name, [])])
+                                  for name in event_namelist
+                                  for handler in self._events.get(name, [])])

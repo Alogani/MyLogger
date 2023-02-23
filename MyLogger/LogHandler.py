@@ -25,7 +25,7 @@ SOFTWARE.
 
 import os
 import subprocess
-from io import TextIOWrapper
+import _io
 from typing import Union
 
 from MyLogger.Formatter import Formatter
@@ -39,13 +39,13 @@ class _BaseHandler:
             raise TypeError("BaseClass is not meant to be instantiated directly")
         self.format = formatter
 
-    def emit(self, message: str, formatter_dict: dict[str, str]) -> None:
-        self._emit(self.format(message, formatter_dict))
+    def emit(self, formatter_dict: dict[str, str]) -> None:
+        self._emit(self.format(formatter_dict))
 
     def _emit(self, message: str) -> None:
         raise NotImplementedError("Subclass must implement abstract method")
 
-    def open(self, open_mode: str = 'a') -> Union[FileFaker, TextIOWrapper]:
+    def open(self, open_mode: str = 'a') -> Union[FileFaker, _io.TextIOWrapper]:
         return FileFaker(lambda content: self._emit(content))
 
 
@@ -55,7 +55,7 @@ class NoneHandler(_BaseHandler):
 
 
 class ConsoleHandler(_BaseHandler):
-    def __init__(self, formatter: Formatter = Formatter("{context} - {time} - {message}")) -> None:
+    def __init__(self, formatter: Formatter = Formatter("{event} - {time} - {message}")) -> None:
         super().__init__(formatter)
 
     def _emit(self, message: str) -> None:
@@ -89,7 +89,7 @@ class NotificationHandler(_BaseHandler):
 
 
 class SystemHandler(_BaseHandler):
-    def __init__(self, title: str = "MyLogger", formatter: Formatter = Formatter("{context} - {message}")) -> None:
+    def __init__(self, title: str = "MyLogger", formatter: Formatter = Formatter("{event} - {message}")) -> None:
         super().__init__(formatter)
         self.title = title
 
@@ -100,7 +100,7 @@ class SystemHandler(_BaseHandler):
 class FileHandler(_BaseHandler):
 
     def __init__(self, file_rotator: _FileRotator,
-                 formatter: Formatter = Formatter("{time} - {context} - {message}")) -> None:
+                 formatter: Formatter = Formatter("{time} - {event} - {message}")) -> None:
         super().__init__(formatter)
         self.file_rotator = file_rotator
 
@@ -109,5 +109,5 @@ class FileHandler(_BaseHandler):
         with self.open('a') as f:
             f.write(f"{message}\n")
 
-    def open(self, open_mode: str = 'a') -> TextIOWrapper:
+    def open(self, open_mode: str = 'a') -> _io.TextIOWrapper:
         return open(self.file_rotator.getPath(), open_mode)
