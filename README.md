@@ -21,6 +21,8 @@ But it's designed to be as higly customizable while staying straitforward.
 - You won't get bloat with a persistent and static logger object and its child. Instead your logger is a class instance (much more pythonic !)
 - Each context can be associated with specific place to log, or different log formatting
 - Easily handle your log as a file, with any handler compatible with "open" function (useful for logging subprocess output)
+- decorators ! Automatically log all exceptions of a function with only one line.
+- more decorators ! Transform each print into a logger with only one line
 
 I recommend to use this module by defining a global logger variable common to all files inside a project (Yes globals are the darkness, but a logger is a special kind of toy)
 
@@ -29,6 +31,4 @@ I recommend to use this module by defining a global logger variable common to al
 According to my needs and time, I could add :
 - logging to mail
 - More ways to rotate files (by size, with compression, rotation on a single file, rotation with different policies (GrandFatherSon or Hanoi))
-- decorator for functions (exception catching)
-- add **kwargs to log function for less verbose message
 - add a class where FileHandler and all FileRotators are merged for a more intuitive usage
